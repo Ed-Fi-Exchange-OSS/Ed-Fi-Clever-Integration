@@ -1,0 +1,823 @@
+{
+	"info": {
+		"_postman_id": "abe8e3f3-d109-4b8e-9e66-ee0895f805dd",
+		"name": "One Roster Standard API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "0.- GetCampusVersion",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth1",
+					"oauth1": [
+						{
+							"key": "disableHeaderEncoding",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
+							"type": "string"
+						},
+						{
+							"key": "consumerSecret",
+							"value": "{{Secret}}",
+							"type": "string"
+						},
+						{
+							"key": "consumerKey",
+							"value": "{{Key}}",
+							"type": "string"
+						},
+						{
+							"key": "version",
+							"value": "1.0",
+							"type": "string"
+						},
+						{
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "OAuth oauth_consumer_key=\\\"n3Gg5wduuoae\\\", oauth_nonce=\\\"5c2993298ee620a0\\\", oauth_signature=\\\"UYm9Ulr8IQIM%2Fl30aeDnBo5uxUqqHUCU%2FXB56Bag42o%3D\\\", oauth_signature_method=\\\"HMAC-SHA256\\\", oauth_timestamp=\\\"1597946285\\\", oauth_version=\\\"1.0\\\"",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{apiUrl}}/campusVersion",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"campusVersion"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "6",
+							"disabled": true
+						},
+						{
+							"key": "orderBy",
+							"value": "asc",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "title",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1.- GetOrgs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth1",
+					"oauth1": [
+						{
+							"key": "disableHeaderEncoding",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
+							"type": "string"
+						},
+						{
+							"key": "consumerSecret",
+							"value": "{{Secret}}",
+							"type": "string"
+						},
+						{
+							"key": "consumerKey",
+							"value": "{{Key}}",
+							"type": "string"
+						},
+						{
+							"key": "version",
+							"value": "1.0",
+							"type": "string"
+						},
+						{
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{Token}}",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "OAuth oauth_consumer_key=\\\"n3Gg5wduuoae\\\", oauth_nonce=\\\"fc4bf046ec10452e\\\", oauth_signature=\\\"EUD5s%2BF4nwLgd%2B%2BjXE4XeBl0AwE19LZidRPAt5XWdaA%3D\\\", oauth_signature_method=\\\"HMAC-SHA256\\\", oauth_timestamp=\\\"1597848749\\\", oauth_version=\\\"1.0\\\""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{apiUrl}}/orgs?offset=0&limit=2000",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"orgs"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "2000"
+						},
+						{
+							"key": "orderBy",
+							"value": "asc",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "title",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.- GetUsers",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth1",
+					"oauth1": [
+						{
+							"key": "disableHeaderEncoding",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
+							"type": "string"
+						},
+						{
+							"key": "consumerSecret",
+							"value": "{{Secret}}",
+							"type": "string"
+						},
+						{
+							"key": "consumerKey",
+							"value": "{{Key}}",
+							"type": "string"
+						},
+						{
+							"key": "version",
+							"value": "1.0",
+							"type": "string"
+						},
+						{
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{apiUrl}}/users?offset=0&limit=1000",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "1000"
+						},
+						{
+							"key": "orderBy",
+							"value": "asc",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "title",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3.- GetCourses",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth1",
+					"oauth1": [
+						{
+							"key": "disableHeaderEncoding",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
+							"type": "string"
+						},
+						{
+							"key": "consumerSecret",
+							"value": "{{Secret}}",
+							"type": "string"
+						},
+						{
+							"key": "consumerKey",
+							"value": "{{Key}}",
+							"type": "string"
+						},
+						{
+							"key": "version",
+							"value": "1.0",
+							"type": "string"
+						},
+						{
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{apiUrl}}/courses",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"courses"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "6",
+							"disabled": true
+						},
+						{
+							"key": "orderBy",
+							"value": "asc",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "title",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4.- GetClasses",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth1",
+					"oauth1": [
+						{
+							"key": "disableHeaderEncoding",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
+							"type": "string"
+						},
+						{
+							"key": "consumerSecret",
+							"value": "{{Secret}}",
+							"type": "string"
+						},
+						{
+							"key": "consumerKey",
+							"value": "{{Key}}",
+							"type": "string"
+						},
+						{
+							"key": "version",
+							"value": "1.0",
+							"type": "string"
+						},
+						{
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{apiUrl}}/classes",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"classes"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "6",
+							"disabled": true
+						},
+						{
+							"key": "orderBy",
+							"value": "asc",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "title",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5.- GetEnrollments",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{apiUrl}}/enrollments",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"enrollments"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "6",
+							"disabled": true
+						},
+						{
+							"key": "orderBy",
+							"value": "asc",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "title",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6.- GetAcademicSessions",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth1",
+					"oauth1": [
+						{
+							"key": "disableHeaderEncoding",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
+							"type": "string"
+						},
+						{
+							"key": "consumerSecret",
+							"value": "{{Secret}}",
+							"type": "string"
+						},
+						{
+							"key": "consumerKey",
+							"value": "{{Key}}",
+							"type": "string"
+						},
+						{
+							"key": "version",
+							"value": "1.0",
+							"type": "string"
+						},
+						{
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{apiUrl}}/academicSessions",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"academicSessions"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "6",
+							"disabled": true
+						},
+						{
+							"key": "orderBy",
+							"value": "asc",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "title",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7.- GetDemographics",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth1",
+					"oauth1": [
+						{
+							"key": "disableHeaderEncoding",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
+							"type": "string"
+						},
+						{
+							"key": "consumerSecret",
+							"value": "{{Secret}}",
+							"type": "string"
+						},
+						{
+							"key": "consumerKey",
+							"value": "{{Key}}",
+							"type": "string"
+						},
+						{
+							"key": "version",
+							"value": "1.0",
+							"type": "string"
+						},
+						{
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{apiUrl}}/demographics",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"demographics"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "6",
+							"disabled": true
+						},
+						{
+							"key": "orderBy",
+							"value": "asc",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "title",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8.- Url Not Found",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth1",
+					"oauth1": [
+						{
+							"key": "disableHeaderEncoding",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
+							"type": "string"
+						},
+						{
+							"key": "consumerSecret",
+							"value": "{{Secret}}",
+							"type": "string"
+						},
+						{
+							"key": "consumerKey",
+							"value": "{{Key}}",
+							"type": "string"
+						},
+						{
+							"key": "version",
+							"value": "1.0",
+							"type": "string"
+						},
+						{
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "OAuth oauth_consumer_key=\"n3Gg5wduuoae\", oauth_nonce=\"310de1e402f7c194\", oauth_signature=\"4ANugWxhnOaf2fQ9Dya9g%2FDZ4CkYbtCTSTRqgyhbE4s%3D\", oauth_signature_method=\"HMAC-SHA256\", oauth_timestamp=\"1597339740\", oauth_version=\"1.0\""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{apiUrl}}/doug",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"doug"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "6",
+							"disabled": true
+						},
+						{
+							"key": "orderBy",
+							"value": "asc",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "title",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "32fd413e-f264-4d29-967e-f9a0e4c9e179",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "6f557ce8-c898-4b36-9724-be35708a7e4c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
