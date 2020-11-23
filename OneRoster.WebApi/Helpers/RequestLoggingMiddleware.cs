@@ -20,7 +20,7 @@ namespace EdFi.OneRoster.WebApi.Helpers
 
         public async Task InvokeAsync(HttpContext context)
         {
-            _logger.LogDebug(
+            _logger.LogInformation(
                  "Request {url} {QueryString} => {statusCode}",
                  context.Request?.Path.Value,
                  context.Request?.QueryString,

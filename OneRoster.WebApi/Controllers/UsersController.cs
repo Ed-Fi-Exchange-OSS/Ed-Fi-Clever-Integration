@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EdFi.OneRoster.WebApi.Controllers
 {
-    [Route(RouteConventions.Default)]
+    [Route("[controller]")]
+    //[Route(RouteConventions.Default)]
     [ApiController]
     public class UsersController : ControllerBase
     {

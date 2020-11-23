@@ -35,10 +35,10 @@ LEFT JOIN edfi.Descriptor RAD 	ON SRA.RaceDescriptorId = RAD.DescriptorId
 UNION ALL
 -- STUDENTS
 SELECT DISTINCT
-	CONCAT('s',  CAST(STU.studentusi AS VARCHAR)  )																			AS "sourcedId"
+	CONCAT('s',  CAST(STU.studentusi AS VARCHAR)  )																					AS "sourcedId"
 	,CASE WHEN (SELECT COUNT(SSAT.StudentUSI) FROM edfi.StudentSchoolAssociation SSAT 
 	WHERE SSAT.StudentUSI = SSA.StudentUSI GROUP BY SSAT.StudentUSI LIMIT 2) = 1 AND SSA.ExitWithdrawDate IS NULL 
-	THEN 'active' ELSE 'active' END 																							AS status
+	THEN 'active' ELSE 'active' END 																								AS status
     , STU.LastModifiedDate::timestamp with time zone                                                         						AS "dateLastModified"
 	, STU.birthDate as  "birthDate"
 	, CASE WHEN SED.CodeValue = 'Female' THEN 'female' ELSE 'male' END																AS sex
@@ -48,7 +48,7 @@ SELECT DISTINCT
     , CAST(CASE WHEN RAD.CodeValue = 'Native Hawaiian - Pacific Islander' THEN 'true' ELSE 'false' END AS VARCHAR)					AS "nativeHawaiianOrOtherPacificIslander"
 	, CAST(CASE WHEN RAD.CodeValue = 'White' THEN 'true' ELSE 'false' END AS VARCHAR)												AS white
     , CAST(CASE WHEN RAD.CodeValue = 'Other'  or   RAD.CodeValue = 'Two or More Races' THEN 'true' ELSE 'false' END AS VARCHAR)		AS "demographicRaceTwoOrMoreRaces"
-	, CAST(CASE WHEN SEOA.HispanicLatinoEthnicity THEN 'true' ELSE 'false' END AS VARCHAR)	  AS "hispanicOrLatinoEthnicity"
+	, CAST(CASE WHEN SEOA.HispanicLatinoEthnicity or RAD.CodeValue = 'Hispanic or Latino' THEN 'true' ELSE 'false' END AS VARCHAR)	AS "hispanicOrLatinoEthnicity"
 
 FROM edfi.Student STU
 INNER JOIN edfi.StudentSchoolAssociation SSA 	ON STU.StudentUSI = SSA.StudentUSI

@@ -5,11 +5,13 @@ using EdFi.OneRoster.WebApi.Services;
 using EdFi.OneRoster.WebApi.Services.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace EdFi.OneRoster.WebApi
 { 
@@ -43,15 +45,33 @@ namespace EdFi.OneRoster.WebApi
                 options.JsonSerializerOptions.IgnoreNullValues = true;
             }); ;
 
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.AddSecurityDefinition("Oauth1 client", new OpenApiSecurityScheme(){In = ParameterLocation.Header,Description = "client name",Name = "ClientName"});
+                c.AddSecurityDefinition("Oauth1 secret", new OpenApiSecurityScheme() { In = ParameterLocation.Header, Description = "client secret", Name = "ClientSecret" });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+          
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UsePathBase(new PathString("/campus/oneroster/go/ims/oneroster/v1p1/"));
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json","MyAPI");
+            });
 
             app.UseDeveloperExceptionPage();
 
@@ -73,6 +93,10 @@ namespace EdFi.OneRoster.WebApi
             {
                 endpoints.MapControllers();
             });
+
+         
+
+
         }
     }
 }
