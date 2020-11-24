@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EdFi.OneRoster.WebApi.Helpers;
 using EdFi.OneRoster.WebApi.Services.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -74,25 +75,21 @@ namespace EdFi.OneRoster.WebApi.Security
 
             var authUrl = GetRequestedUrl(context);
             var signatureBaseString = "GET&" + Uri.EscapeDataString(authUrl) + "&" + Uri.EscapeDataString(parametersString);
+            _logger.LogInformation("server signature " + signatureBaseString);
 
             var requestSignature = parameters.First(m => m.Key == "oauth_signature").Value;
-            _logger.LogDebug("Client signature " + requestSignature);
+            _logger.LogInformation("Client signature " + requestSignature);
 
             var result = ValidateOauthSignature(requestSignature, clientSecret, signatureBaseString);
         }
 
         private string GetRequestedUrl(HttpContext context)
         {
-            var requestedUri = new UriBuilder
-            {
-                Host = context.Request.Host.Host,
-                Scheme = context.Request.Scheme,
-                Path = context.Request.Path
-            };
-            if (context.Request.Host.Port != null)
-                requestedUri.Port = context.Request.Host.Port.Value;
+            var indexOf= context.Request.GetDisplayUrl().IndexOf("?");
 
-            return requestedUri.ToString();
+            indexOf = indexOf <0 ? context.Request.GetDisplayUrl().Length: indexOf;
+
+            return context.Request.GetDisplayUrl().Substring(0, indexOf);
         }
 
         private List<string> GetOauthParametersBuild(string authHeader)

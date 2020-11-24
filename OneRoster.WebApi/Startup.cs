@@ -30,7 +30,7 @@ namespace EdFi.OneRoster.WebApi
 
             var serviceName = Configuration.GetValue<string>("ApplicationSettings:OneRosterService");
 
-            if (serviceName == "OneRosterStaticDataService")
+            if (serviceName == "OneRosterStaticService")
                 services.AddScoped<IOneRosterService, OneRosterStaticDataService>();
             else
                 services.AddScoped<IOneRosterService, OneRosterDatabaseService>();
