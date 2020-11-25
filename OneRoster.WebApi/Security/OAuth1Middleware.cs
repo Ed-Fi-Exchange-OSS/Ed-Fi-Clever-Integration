@@ -66,6 +66,7 @@ namespace EdFi.OneRoster.WebApi.Security
 
             var queryParam = context.Request.QueryString.ToString().Replace("?", "").Split("&").Where(m => m != "").ToList();
             var parametersBuild = GetOauthParametersBuild(auth);
+            
             parametersBuild.AddRange(queryParam);
 
             var client = clients.FirstOrDefault(m => m.Key == consumerKey.Value);
@@ -75,17 +76,17 @@ namespace EdFi.OneRoster.WebApi.Security
 
             var authUrl = GetRequestedUrl(context);
             var signatureBaseString = "GET&" + Uri.EscapeDataString(authUrl) + "&" + Uri.EscapeDataString(parametersString);
-            _logger.LogInformation("server signature " + signatureBaseString);
-
+            
             var requestSignature = parameters.First(m => m.Key == "oauth_signature").Value;
-            _logger.LogInformation("Client signature " + requestSignature);
+
+            _logger.LogDebug("Client signature " + requestSignature);
 
             var result = ValidateOauthSignature(requestSignature, clientSecret, signatureBaseString);
         }
 
         private string GetRequestedUrl(HttpContext context)
         {
-            var indexOf= context.Request.GetDisplayUrl().IndexOf("?");
+            var indexOf= context.Request.GetDisplayUrl().IndexOf("?", StringComparison.Ordinal);
 
             indexOf = indexOf <0 ? context.Request.GetDisplayUrl().Length: indexOf;
 
