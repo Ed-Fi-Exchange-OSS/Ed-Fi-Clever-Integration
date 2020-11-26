@@ -43,6 +43,8 @@ namespace EdFi.OneRoster.WebApi
                 options.JsonSerializerOptions.IgnoreNullValues = true;
             }); ;
 
+            services.AddAuthentication("oauth1")
+                .AddScheme<BasicAuthenticationOptions, Oauth1AuthenticationHandler>("oauth1", null);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,10 +63,10 @@ namespace EdFi.OneRoster.WebApi
             loggerFactory.AddFile(loggerPath);
 
             app.UseMiddleware<RequestLoggingMiddleware>();
-            app.UseMiddleware<OAuth1Middleware>();
-
+            //app.UseMiddleware<OAuth1Middleware>();
             //app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseAuthorization();
