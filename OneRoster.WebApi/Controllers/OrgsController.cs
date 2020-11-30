@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EdFi.OneRoster.WebApi.Controllers
 {
     
-    [Route(RouteConventions.Default)]
+    [Route("[controller]")]
     [ApiController]
     public class OrgsController : ControllerBase
     {

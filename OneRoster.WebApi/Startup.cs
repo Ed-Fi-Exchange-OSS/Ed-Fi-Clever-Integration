@@ -5,6 +5,7 @@ using EdFi.OneRoster.WebApi.Services;
 using EdFi.OneRoster.WebApi.Services.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,6 +55,8 @@ namespace EdFi.OneRoster.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UsePathBase(new PathString("/campus/oneroster/go/ims/oneroster/v1p1/"));
 
             app.UseDeveloperExceptionPage();
 
