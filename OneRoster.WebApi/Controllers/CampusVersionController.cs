@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
 using EdFi.OneRoster.WebApi.Helpers;
 using EdFi.OneRoster.WebApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdFi.OneRoster.WebApi.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class CampusVersionController : ControllerBase

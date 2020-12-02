@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using EdFi.OneRoster.Persistence.EntityFrameWork;
 using EdFi.OneRoster.WebApi.Helpers;
 using EdFi.OneRoster.WebApi.Security;
@@ -44,8 +46,31 @@ namespace EdFi.OneRoster.WebApi
                 options.JsonSerializerOptions.IgnoreNullValues = true;
             }); ;
 
-            services.AddAuthentication("oauth1")
-                .AddScheme<BasicAuthenticationOptions, Oauth1AuthenticationHandler>("oauth1", null);
+
+            var clients = Configuration.GetSection("ApplicationSettings:Clients").Get<Dictionary<string, string>>();
+
+            var oauth1Clients= clients.Select(m => new OAuth1Client(){Client_Id = m.Key,Client_Secret = m.Value ,Name = "random"}).ToList();
+
+            services.AddAuthentication(
+                m =>
+                {
+                    m.DefaultAuthenticateScheme = "OAuth1";
+                    m.DefaultChallengeScheme= "OAuth1";
+                    m.DefaultScheme = "OAuth1";
+                    m.AddScheme<Oauth1AuthenticationHandler>("OAuth1", null);
+
+                }
+
+                //x=> x.DefaultAuthenticateScheme = "OAuth1";
+                //x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            
+                );
+
+            //    .AddOAuth1("OAuth1", options =>
+            //{
+            //    options.oAuth1Clients = oauth1Clients;
+            //})
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,14 +90,16 @@ namespace EdFi.OneRoster.WebApi
 
             loggerFactory.AddFile(loggerPath);
 
-            app.UseMiddleware<RequestLoggingMiddleware>();
+            //app.UseMiddleware<RequestLoggingMiddleware>();
             //app.UseMiddleware<OAuth1Middleware>();
             //app.UseHttpsRedirection();
 
-            app.UseAuthentication();
+
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {
