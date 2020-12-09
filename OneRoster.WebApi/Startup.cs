@@ -5,6 +5,7 @@ using EdFi.OneRoster.WebApi.Helpers;
 using EdFi.OneRoster.WebApi.Security;
 using EdFi.OneRoster.WebApi.Services;
 using EdFi.OneRoster.WebApi.Services.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -51,26 +52,32 @@ namespace EdFi.OneRoster.WebApi
 
             var oauth1Clients= clients.Select(m => new OAuth1Client(){Client_Id = m.Key,Client_Secret = m.Value ,Name = "random"}).ToList();
 
-            services.AddAuthentication(
-                m =>
-                {
-                    m.DefaultAuthenticateScheme = "OAuth1";
-                    m.DefaultChallengeScheme= "OAuth1";
-                    m.DefaultScheme = "OAuth1";
-                    m.AddScheme<Oauth1AuthenticationHandler>("OAuth1", null);
+            services.AddAuthentication().AddOAuth1(
+                m => { m.oAuth1Clients = oauth1Clients; }
+            );
 
-                }
+            //services.AddAuthentication(
+            //    m =>
+            //    {
+            //        m.DefaultAuthenticateScheme = "OAuth1";
+            //        m.DefaultChallengeScheme= "OAuth1";
+            //        m.DefaultScheme = "OAuth1";
+            //        m.AddScheme<Oauth1AuthenticationHandler>("OAuth1", null);
 
-                //x=> x.DefaultAuthenticateScheme = "OAuth1";
-                //x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    }
+
             
-                );
+            //    //x=> x.DefaultAuthenticateScheme = "OAuth1";
+            //    //x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            
+            //    );
 
             //    .AddOAuth1("OAuth1", options =>
             //{
             //    options.oAuth1Clients = oauth1Clients;
             //})
 
+            services.AddSingleton<IAuthenticationService, ChallengeOnlyAuthenticationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
