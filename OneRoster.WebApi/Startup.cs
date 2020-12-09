@@ -49,35 +49,11 @@ namespace EdFi.OneRoster.WebApi
 
 
             var clients = Configuration.GetSection("ApplicationSettings:Clients").Get<Dictionary<string, string>>();
+            var oauth1Clients = clients.Select(m => new OAuth1Client() { Client_Id = m.Key, Client_Secret = m.Value, Name = "random" }).ToList();
 
-            var oauth1Clients= clients.Select(m => new OAuth1Client(){Client_Id = m.Key,Client_Secret = m.Value ,Name = "random"}).ToList();
+            services.AddAuthentication(OAuth1Options.DefaultScheme).AddOAuth1(m=> {m.oAuth1Clients = oauth1Clients;});
 
-            services.AddAuthentication().AddOAuth1(
-                m => { m.oAuth1Clients = oauth1Clients; }
-            );
-
-            //services.AddAuthentication(
-            //    m =>
-            //    {
-            //        m.DefaultAuthenticateScheme = "OAuth1";
-            //        m.DefaultChallengeScheme= "OAuth1";
-            //        m.DefaultScheme = "OAuth1";
-            //        m.AddScheme<Oauth1AuthenticationHandler>("OAuth1", null);
-
-            //    }
-
-            
-            //    //x=> x.DefaultAuthenticateScheme = "OAuth1";
-            //    //x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            
-            //    );
-
-            //    .AddOAuth1("OAuth1", options =>
-            //{
-            //    options.oAuth1Clients = oauth1Clients;
-            //})
-
-            services.AddSingleton<IAuthenticationService, ChallengeOnlyAuthenticationService>();
+          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,13 +73,12 @@ namespace EdFi.OneRoster.WebApi
 
             loggerFactory.AddFile(loggerPath);
 
-            //app.UseMiddleware<RequestLoggingMiddleware>();
+            app.UseMiddleware<RequestLoggingMiddleware>();
             //app.UseMiddleware<OAuth1Middleware>();
             //app.UseHttpsRedirection();
 
 
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
 
