@@ -22,7 +22,7 @@ namespace EdFi.OneRoster.WebApi.Security
     {
         public List<OAuth1Client> oAuth1Clients { get; set; }
 
-        public const string DefaultScheme = "OAuth1";
+        public const string DefaultScheme = OAuth1Defaults.AuthenticationScheme;
         public string Scheme => DefaultScheme;
     }
 
@@ -301,6 +301,17 @@ namespace EdFi.OneRoster.WebApi.Security
         public string Name { get; set; }
         public string Client_Secret { get; set; }
 
+    }
+
+    /// <summary>
+    /// Default values used by bearer authentication.
+    /// </summary>
+    public static class OAuth1Defaults
+    {
+        /// <summary>
+        /// Default value for AuthenticationScheme property in the JwtBearerAuthenticationOptions
+        /// </summary>
+        public const string AuthenticationScheme = "OAuth1";
     }
 
 }
