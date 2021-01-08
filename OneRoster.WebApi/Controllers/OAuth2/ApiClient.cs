@@ -7,9 +7,9 @@ namespace EdFi.OneRoster.WebApi.Controllers.OAuth2
 {
     public class ApiClient
     {
-        public int Id { get; set; }
-        public int SelfClientId { get; set; }
-        public string Application { get; set; }
-        public Guid Guid { get; set; }
+        public string Id { get; set; }
+        //public int SelfClientId { get; set; }
+        //public string Application { get; set; }
+        //public Guid Guid { get; set; }
     }
 }

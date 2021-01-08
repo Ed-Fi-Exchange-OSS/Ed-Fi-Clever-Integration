@@ -21,7 +21,7 @@ SELECT  DISTINCT
     , CAST(CASE WHEN RAD.CodeValue = 'Black - African American' THEN 'true' ELSE 'false' END AS VARCHAR)							AS "blackOrAfricanAmerican"
     , CAST(CASE WHEN RAD.CodeValue = 'Native Hawaiian - Pacific Islander' THEN 'true' ELSE 'false' END AS VARCHAR)					AS "nativeHawaiianOrOtherPacificIslander"
 	, CAST(CASE WHEN RAD.CodeValue = 'White' THEN 'true' ELSE 'false' END AS VARCHAR)												AS white
-    , CAST(CASE WHEN RAD.CodeValue = 'Other'  or RAD.CodeValue = 'Two or More Races' THEN 'true' ELSE 'false' END AS VARCHAR)						AS "demographicRaceTwoOrMoreRaces"
+    , CAST(CASE WHEN RAD.CodeValue = 'Other'  or   RAD.CodeValue is null  or RAD.CodeValue = 'Two or More Races' THEN 'true' ELSE 'false' END AS VARCHAR)						AS "demographicRaceTwoOrMoreRaces"
 	,  CAST(CASE WHEN STA.HispanicLatinoEthnicity THEN 'true' ELSE 'false' END AS VARCHAR)  AS "hispanicOrLatinoEthnicity"
 	
     
@@ -47,7 +47,7 @@ SELECT DISTINCT
     , CAST(CASE WHEN SRA.CodeValues like '%Black - African American%' THEN 'true' ELSE 'false' END AS VARCHAR)							AS "blackOrAfricanAmerican"
     , CAST(CASE WHEN SRA.CodeValues like '%Native Hawaiian - Pacific Islander%' THEN 'true' ELSE 'false' END AS VARCHAR)					AS "nativeHawaiianOrOtherPacificIslander"
 	, CAST(CASE WHEN SRA.CodeValues like '%White%' THEN 'true' ELSE 'false' END AS VARCHAR)												AS white
-    , CAST(CASE WHEN SRA.CodeValues like '%Other%'  or   SRA.CodeValues like '%Two or More Races%' or SRA.CodeValues like '%,%' THEN 'true' ELSE 'false' END AS VARCHAR)		AS "demographicRaceTwoOrMoreRaces"
+    , CAST(CASE WHEN SRA.CodeValues like '%Other%'  or   SRA.CodeValues like '%Two or More Races%'    or   SRA.CodeValues is null or SRA.CodeValues like '%,%' THEN 'true' ELSE 'false' END AS VARCHAR)		AS "demographicRaceTwoOrMoreRaces"
 		, CAST(CASE WHEN SEOA.HispanicLatinoEthnicity = true or SRA.CodeValues like '%Hispanic or Latino%' THEN 'true' ELSE 'false' END AS VARCHAR)	AS "hispanicOrLatinoEthnicity"
 
 FROM edfi.Student STU

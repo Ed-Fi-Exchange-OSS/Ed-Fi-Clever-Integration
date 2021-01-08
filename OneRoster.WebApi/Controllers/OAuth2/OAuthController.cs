@@ -81,8 +81,7 @@ namespace EdFi.OneRoster.WebApi.Controllers.OAuth2
                 return Unauthorized($"Key and Secret combination are invalid");
 
             var claims = new List<Claim> {
-                //new Claim("APIClientId", identity.Id.ToString()),
-                //new Claim("NelticClientId", identity.NelticClientId.ToString()),
+                new Claim("APIClientId", identity.Id.ToString()),
                 //// TODO: Implement logic to make this so.
                 //// These are just ideas but we dont need this right now...
                 //new Claim("ViewAllOrders", "True"),
