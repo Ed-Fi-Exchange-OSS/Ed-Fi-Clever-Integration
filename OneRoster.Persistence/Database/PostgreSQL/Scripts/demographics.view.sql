@@ -42,19 +42,25 @@ SELECT DISTINCT
     , STU.LastModifiedDate::timestamp with time zone                                                         						AS "dateLastModified"
 	, STU.birthDate as  "birthDate"
 	, CASE WHEN SED.CodeValue = 'Female' THEN 'female' ELSE 'male' END																AS sex
-	, CAST(CASE WHEN RAD.CodeValue = 'American Indian - Alaska Native' THEN 'true' ELSE 'false' END AS VARCHAR)						AS "americanIndianOrAlaskaNative"
-	, CAST(CASE WHEN RAD.CodeValue = 'Asian' THEN 'true' ELSE 'false' END AS VARCHAR)												AS asian
-    , CAST(CASE WHEN RAD.CodeValue = 'Black - African American' THEN 'true' ELSE 'false' END AS VARCHAR)							AS "blackOrAfricanAmerican"
-    , CAST(CASE WHEN RAD.CodeValue = 'Native Hawaiian - Pacific Islander' THEN 'true' ELSE 'false' END AS VARCHAR)					AS "nativeHawaiianOrOtherPacificIslander"
-	, CAST(CASE WHEN RAD.CodeValue = 'White' THEN 'true' ELSE 'false' END AS VARCHAR)												AS white
-    , CAST(CASE WHEN RAD.CodeValue = 'Other'  or   RAD.CodeValue = 'Two or More Races' THEN 'true' ELSE 'false' END AS VARCHAR)		AS "demographicRaceTwoOrMoreRaces"
-	, CAST(CASE WHEN SEOA.HispanicLatinoEthnicity or RAD.CodeValue = 'Hispanic or Latino' THEN 'true' ELSE 'false' END AS VARCHAR)	AS "hispanicOrLatinoEthnicity"
+	, CAST(CASE WHEN SRA.CodeValues like '%American Indian - Alaska Native%' THEN 'true' ELSE 'false' END AS VARCHAR)						AS "americanIndianOrAlaskaNative"
+	, CAST(CASE WHEN SRA.CodeValues like '%Asian%' THEN 'true' ELSE 'false' END AS VARCHAR)												AS asian
+    , CAST(CASE WHEN SRA.CodeValues like '%Black - African American%' THEN 'true' ELSE 'false' END AS VARCHAR)							AS "blackOrAfricanAmerican"
+    , CAST(CASE WHEN SRA.CodeValues like '%Native Hawaiian - Pacific Islander%' THEN 'true' ELSE 'false' END AS VARCHAR)					AS "nativeHawaiianOrOtherPacificIslander"
+	, CAST(CASE WHEN SRA.CodeValues like '%White%' THEN 'true' ELSE 'false' END AS VARCHAR)												AS white
+    , CAST(CASE WHEN SRA.CodeValues like '%Other%'  or   SRA.CodeValues like '%Two or More Races%' or SRA.CodeValues like '%,%' THEN 'true' ELSE 'false' END AS VARCHAR)		AS "demographicRaceTwoOrMoreRaces"
+		, CAST(CASE WHEN SEOA.HispanicLatinoEthnicity = true or SRA.CodeValues like '%Hispanic or Latino%' THEN 'true' ELSE 'false' END AS VARCHAR)	AS "hispanicOrLatinoEthnicity"
 
 FROM edfi.Student STU
 INNER JOIN edfi.StudentSchoolAssociation SSA 	ON STU.StudentUSI = SSA.StudentUSI
 LEFT JOIN edfi.Descriptor SED 	ON STU.BirthSexDescriptorId = SED.DescriptorId
 INNER JOIN edfi.StudentEducationOrganizationAssociation SEOA 	ON STU.StudentUSI = SEOA.StudentUSI
-LEFT  JOIN  ( select SRASingle.studentusi,SRASingle.RaceDescriptorId  from  edfi.studenteducationorganizationassociationrace SRASingle  ) SRA ON STU.studentusi = SRA.studentusi
-LEFT JOIN edfi.Descriptor RAD 	ON SRA.RaceDescriptorId = RAD.DescriptorId
+
+left join (SELECT edfi.studenteducationorganizationassociationrace.studentusi
+,  string_agg(edfi.Descriptor.codevalue::text, ',')  CodeValues
+FROM edfi.studenteducationorganizationassociationrace
+LEFT JOIN edfi.Descriptor  	ON edfi.studenteducationorganizationassociationrace.RaceDescriptorId = edfi.Descriptor.DescriptorId
+GROUP BY edfi.studenteducationorganizationassociationrace.studentusi
+) SRA ON STU.studentusi = SRA.studentusi
+
 join edfi.StudentSchoolAssociation SSAT on SSAT.StudentUSI = stu.StudentUSI
 where SSAT.exitwithdrawdate is null

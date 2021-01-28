@@ -1,12 +1,15 @@
 ﻿using System.Threading.Tasks;
-using EdFi.OneRoster.WebApi.Helpers;
+using EdFi.OneRoster.WebApi.Security;
 using EdFi.OneRoster.WebApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdFi.OneRoster.WebApi.Controllers
 {
+    
+    [Authorize(AuthenticationSchemes = OAuth1Defaults.AuthenticationScheme + ", " + JwtBearerDefaults.AuthenticationScheme)]    
     [Route("[controller]")]
-    //[Route(RouteConventions.Default)]
     [ApiController]
     public class OrgsController : ControllerBase
     {
@@ -18,6 +21,7 @@ namespace EdFi.OneRoster.WebApi.Controllers
         }
 
         [HttpGet]
+        
         public async Task<IActionResult> GetOrgs([FromQuery] RequestModel request)
         {
             var response = await _service.GetOrgsAsync(request);
