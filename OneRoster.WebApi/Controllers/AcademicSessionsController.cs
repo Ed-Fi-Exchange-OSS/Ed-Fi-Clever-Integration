@@ -1,11 +1,15 @@
 ﻿using System.Threading.Tasks;
 using EdFi.OneRoster.WebApi.Helpers;
+using EdFi.OneRoster.WebApi.Security;
 using EdFi.OneRoster.WebApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdFi.OneRoster.WebApi.Controllers
 {
-    [Route(RouteConventions.Default)]
+    [Authorize(AuthenticationSchemes = OAuth1Defaults.AuthenticationScheme + ", " + JwtBearerDefaults.AuthenticationScheme)]
+    [Route("[controller]")]
     [ApiController]
     public class AcademicSessionsController : ControllerBase
     {

@@ -11,12 +11,12 @@ using Microsoft.Extensions.Options;
 
 namespace EdFi.OneRoster.WebApi.Security
 {
-    public class OAuth1Middleware
+    public class Oauth1SwaggerMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
         private readonly ApplicationSettings _settings;
-        public OAuth1Middleware(RequestDelegate next, ILoggerFactory loggerFactory, IOptions<ApplicationSettings> settings)
+        public Oauth1SwaggerMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IOptions<ApplicationSettings> settings)
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<RequestLoggingMiddleware>();
@@ -28,7 +28,9 @@ namespace EdFi.OneRoster.WebApi.Security
             try
             {
                 if (_settings.OAuthEnabled)
+                {
                     ValidateAuth(context);
+                }
 
                 await _next(context);
             }
@@ -50,35 +52,38 @@ namespace EdFi.OneRoster.WebApi.Security
 
         public void ValidateAuth(HttpContext context)
         {
-            var auth = context.Request.Headers["Authorization"];
-            if (string.IsNullOrEmpty(auth))
-                throw new UnauthorizedAccessException("Authorization not  found");
+            //var auth = context.Request.Headers["Authorization"];
+            //if (string.IsNullOrEmpty(auth))
+            //    throw new UnauthorizedAccessException("Authorization not  found");
 
-            var parameters = GetOauthParameters(auth);
-            if (!parameters.ContainsKey("oauth_consumer_key"))
-                throw new UnauthorizedAccessException("Unauthorized, consumer key (clientId) is missing.");
+            //var parameters = GetOauthParameters(auth);
+            //if (!parameters.ContainsKey("oauth_consumer_key"))
+            //    throw new UnauthorizedAccessException("Unauthorized, consumer key (clientId) is missing.");
 
-            var consumerKey = parameters.FirstOrDefault(m => m.Key == "oauth_consumer_key");
+            //var consumerKey = parameters.FirstOrDefault(m => m.Key == "oauth_consumer_key");
             var clients = _settings.Clients;
-            if (!clients.ContainsKey(consumerKey.Value))
-                throw new UnauthorizedAccessException("Unauthorized, consumer key (clientId) is missing.");
+            //if (!clients.ContainsKey(consumerKey.Value))
+            //    throw new UnauthorizedAccessException("Unauthorized, consumer key (clientId) is missing.");
 
-            var queryParam = context.Request.QueryString.ToString().Replace("?", "").Split("&").Where(m => m != "").ToList();
-            var parametersBuild = GetOauthParametersBuild(auth);
-            parametersBuild.AddRange(queryParam);
+            //var queryParam = context.Request.QueryString.ToString().Replace("?", "").Split("&").Where(m => m != "").ToList();
+            //var parametersBuild = GetOauthParametersBuild(auth);
+            //parametersBuild.AddRange(queryParam);
 
-            var client = clients.FirstOrDefault(m => m.Key == consumerKey.Value);
-            var clientSecret = client.Value;
+            var clientValue= context.Request.Headers["ClientName"];
+            var secretValue= context.Request.Headers["ClientSecret"];
 
-            var parametersString = ConvertParametersToString(parametersBuild);
+            var client = clients.FirstOrDefault(m => m.Key == clientValue);
+            var clientSecret = secretValue;
+
+            //var parametersString = ConvertParametersToString(parametersBuild);
 
             var authUrl = GetRequestedUrl(context);
-            var signatureBaseString = "GET&" + Uri.EscapeDataString(authUrl) + "&" + Uri.EscapeDataString(parametersString);
+            //var signatureBaseString = "GET&" + Uri.EscapeDataString(authUrl) + "&" + Uri.EscapeDataString(parametersString);
 
-            var requestSignature = parameters.First(m => m.Key == "oauth_signature").Value;
-            _logger.LogDebug("Client signature " + requestSignature);
+            //var requestSignature = parameters.First(m => m.Key == "oauth_signature").Value;
+            //_logger.LogDebug("Client signature " + requestSignature);
 
-            var result = ValidateOauthSignature(requestSignature, clientSecret, signatureBaseString);
+            //var result = ValidateOauthSignature(requestSignature, clientSecret, signatureBaseString);
         }
 
         private string GetRequestedUrl(HttpContext context)
@@ -204,7 +209,7 @@ namespace EdFi.OneRoster.WebApi.Security
             _logger.LogDebug("generated signature " + generatedSignature);
 
             if (requestSignature != generatedSignature)
-                throw new UnauthorizedAccessException("Unauthorized, invalid auth signature.");
+                throw new UnauthorizedAccessException("Unauthorized, invalid auth signature." + requestSignature + " " + generatedSignature);
             return true;
         }
 
