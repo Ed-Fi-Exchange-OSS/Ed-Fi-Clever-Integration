@@ -7,7 +7,7 @@ AS
 SELECT  DISTINCT 
 	-- a = staff, t = teacher
 	CONCAT((CASE WHEN SSA.ClassroomPositionDescriptorId IS NULL THEN 't' ELSE 't' END), 
-	CAST(sta.StaffUSI AS VARCHAR)  
+	CAST(sta.StaffUniqueId AS VARCHAR)  
 	) 				AS "sourcedId"
 	, 
 	CASE WHEN (SELECT COUNT(SEOAAT.StaffUSI) FROM edfi.StaffEducationOrganizationAssignmentAssociation SEOAAT 
@@ -26,16 +26,20 @@ SELECT  DISTINCT
 	
     
 FROM edfi.Staff STA 
+
 LEFT JOIN edfi.StaffSectionAssociation SSA	ON STA.StaffUSI = SSA.StaffUSI
 LEFT JOIN edfi.StaffEducationOrganizationAssignmentAssociation SEOAA	ON STA.StaffUSI = SEOAA.StaffUSI
 LEFT JOIN edfi.Descriptor SED 	ON STA.SexDescriptorId = SED.DescriptorId
 LEFT  JOIN  ( select SRASingle.StaffUSI,SRASingle.RaceDescriptorId  from  edfi.StaffRace SRASingle  ) SRA ON STA.StaffUSI = SRA.StaffUSI
 LEFT JOIN edfi.Descriptor RAD 	ON SRA.RaceDescriptorId = RAD.DescriptorId
 
+where seoaa.BeginDate<=CURRENT_DATE and (seoaa.EndDate is null OR seoaa.EndDate >= CURRENT_DATE)
+
+
 UNION ALL
 -- STUDENTS
 SELECT DISTINCT
-	CONCAT('s',  CAST(STU.studentusi AS VARCHAR)  )																					AS "sourcedId"
+	CONCAT('s',  CAST(STU.StudentUniqueId AS VARCHAR)  )																					AS "sourcedId"
 	,CASE WHEN (SELECT COUNT(SSAT.StudentUSI) FROM edfi.StudentSchoolAssociation SSAT 
 	WHERE SSAT.StudentUSI = SSA.StudentUSI GROUP BY SSAT.StudentUSI LIMIT 2) = 1 AND SSA.ExitWithdrawDate IS NULL 
 	THEN 'active' ELSE 'active' END 																								AS status

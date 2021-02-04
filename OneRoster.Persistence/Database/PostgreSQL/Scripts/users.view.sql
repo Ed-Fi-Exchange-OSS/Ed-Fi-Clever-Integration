@@ -13,10 +13,10 @@ AS
 		--, ssa.schoolyear	cant find schoolyear from ssa
 		,0 as schoolyear 
 		--,  concat(seoaa.positiontitle, ' - ' ,scd.codevalue ) as TeacherPosition
-		, concat('t',sta.staffusi) 							as "sourcedId"		
+		, concat('t',sta.StaffUniqueId) 							as "sourcedId"		
 		, 'active' 											as "status" 
 		, sta.LastModifiedDate::timestamp with time zone  	as "dateLastModified"
-		, case when sta.LoginId is null then concat('t',CAST(STA.staffusi as VARCHAR)) else STA.LoginId end as "username"
+		, case when sta.LoginId is null then concat('t',CAST(STA.StaffUniqueId as VARCHAR)) else STA.LoginId end as "username"
 		-- Assumption: If a teacher is teaching a course they are enabled.
 		, true 												as "enabledUser"
 		, sta.FirstName										as "givenName"
@@ -36,7 +36,7 @@ join edfi.staffeducationorganizationassignmentassociation seoaa on sta.staffusi 
 left join edfi.educationorganization  eo on seoaa.educationorganizationid = eo.educationorganizationid
 inner join edfi."descriptor" scd on seoaa.staffclassificationdescriptorid = scd.descriptorid
 where not exists(select ssa.staffusi from  edfi.staffsectionassociation ssa where sta.staffusi = ssa.staffusi)
-
+and seoaa.BeginDate<=CURRENT_DATE and (seoaa.EndDate is null OR seoaa.EndDate >= CURRENT_DATE)
 )
 
 UNION ALL
@@ -49,11 +49,11 @@ UNION ALL
 		, ssa.schoolyear
 		--, ssa.localcoursecode, ssa.begindate, ssa.enddate 
 		--, cpd.codevalue as TeacherPosition
-		, concat('t',sta.staffusi) 							as "sourcedId"
+		, concat('t',sta.StaffUniqueId) 							as "sourcedId"
 		-- Database does not have a begin and enddate for the section so we cant calcualte active.
 		, 'active' 											as "status" 
 		, sta.LastModifiedDate::timestamp with time zone  	as "dateLastModified"
-		, case when sta.LoginId is null then concat('t',CAST(STA.staffusi as VARCHAR)) else STA.LoginId end as "username"
+		, case when sta.LoginId is null then concat('t',CAST(STA.StaffUniqueId as VARCHAR)) else STA.LoginId end as "username"
 		-- Assumption: If a teacher is teaching a course they are enabled.
 		, true 												as "enabledUser"
 		, sta.FirstName										as "givenName"
@@ -71,10 +71,12 @@ inner join edfi.staffsectionassociation ssa on sta.staffusi = ssa.staffusi
 inner join edfi.educationorganization  eo on ssa.schoolid = eo.educationorganizationid
 inner join edfi."descriptor" cpd on ssa.classroompositiondescriptorid = cpd.descriptorid 
 inner join edfi.schoolyeartype syt on ssa.schoolyear = syt.schoolyear and syt.currentschoolyear 
+join edfi.staffeducationorganizationassignmentassociation seoaa on sta.staffusi = seoaa.staffusi
+where seoaa.BeginDate<=CURRENT_DATE and (seoaa.EndDate is null OR seoaa.EndDate >= CURRENT_DATE)
 --where ssa.schoolid = 84202
 group by ssa.schoolid, eo.id, eo.educationorganizationid, eo.nameofinstitution, ssa.schoolyear, sta.staffusi, sta.firstname, sta.lastsurname, cpd.codevalue, "sourcedId", "status"
 --ssa.localcoursecode, ssa.begindate, ssa.enddate
-order by ssa.schoolid, sta.staffusi
+order by ssa.schoolid, sta.StaffUniqueId
 )
 
 UNION ALL
@@ -85,11 +87,11 @@ select
 		, eo.nameofinstitution								as  "NameOfInstitution"
 		, ssa.schoolyear		
 		--, '' as TeacherPosition
-		, concat('s',stu.studentusi) 						as "sourcedId"
+		, concat('s',stu.StudentUniqueId) 						as "sourcedId"
 		-- Database does not have a begin and enddate for the section so we cant calcualte active.
 		, 'active' 											as "status" 
 		, stu.LastModifiedDate::timestamp with time zone  	as "dateLastModified"
-		, case when SEOA.LoginId is null then concat('s',CAST(stu.studentusi as VARCHAR)) else SEOA.LoginId end as "username"
+		, case when SEOA.LoginId is null then concat('s',CAST(stu.StudentUniqueId as VARCHAR)) else SEOA.LoginId end as "username"
 		-- Assumption: If a teacher is teaching a course they are enabled.
 		, true 												as "enabledUser"
 		, STU.FirstName										as "givenName"

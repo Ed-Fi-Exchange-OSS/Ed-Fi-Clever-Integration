@@ -14,14 +14,16 @@ SELECT DISTINCT
 	,SEC.LastModifiedDate::timestamp with time zone														AS "dateLastModified"
 	, 'teacher'																							as role
 	, CAST(CASE WHEN UPPER(CD.CodeValue) = UPPER('Teacher Of Record') THEN true ELSE false END AS boolean)    		AS primary
-	, CONCAT('{ "sourcedId": "',(CASE WHEN SSA.ClassroomPositionDescriptorId IS NULL THEN 'a' ELSE 't' END),CAST(ssa.staffusi AS VARCHAR) , '"}')									as user
+	, CONCAT('{ "sourcedId": "',(CASE WHEN SSA.ClassroomPositionDescriptorId IS NULL THEN 'a' ELSE 't' END),CAST(sta.StaffUniqueId AS VARCHAR) , '"}')									as user
 	, CONCAT('{ "sourcedId":"', SEC.Id, '" }')															AS class
 	, CONCAT('{ "sourcedId":"', EO.id, '"  }')															AS school
 	, SSA.BeginDate::timestamp with time zone																AS "beginDate"
 	, SSA.EndDate::timestamp with time zone	 																AS "endDate"	
-	, CONCAT((CASE WHEN SSA.ClassroomPositionDescriptorId IS NULL THEN 'a' ELSE 't' END),CAST(ssa.staffusi AS VARCHAR) ) as id
+	, CONCAT((CASE WHEN SSA.ClassroomPositionDescriptorId IS NULL THEN 'a' ELSE 't' END),CAST(sta.StaffUniqueId AS VARCHAR) ) as id
 		, SEC.Id classid
-FROM edfi.StaffSectionAssociation SSA 	
+FROM 
+edfi.Staff sta
+join edfi.StaffSectionAssociation SSA on  sta.staffusi = ssa.staffusi
 JOIN  edfi.Section SEC
 	ON SSA.SectionIdentifier = SEC.SectionIdentifier 
 	AND SEC.SessionName = SSA.SessionName
@@ -37,6 +39,8 @@ LEFT JOIN edfi.Descriptor CD  	ON SSA.ClassroomPositionDescriptorId = CD.Descrip
 	AND STSA.SchoolYear = SSA.SchoolYear
 	AND STSA.SessionName = SSA.SessionName
 	
+	join edfi.staffeducationorganizationassignmentassociation seoaa on sta.staffusi = seoaa.staffusi
+	
 	
 	
 where
@@ -45,6 +49,7 @@ edfi.StudentSchoolAssociation SSAT where  SSAT.studentusi = STSA.studentusi
 and SSAT.exitwithdrawdate is null 
 order by SSAT.createdate desc  limit 1
 )
+and seoaa.BeginDate<=CURRENT_DATE and (seoaa.EndDate is null OR seoaa.EndDate >= CURRENT_DATE)
 
 )  
 UNION ALL
@@ -57,16 +62,18 @@ SELECT DISTINCT
 	, SEC.LastModifiedDate::timestamp with time zone														AS "dateLastModified"
 	, 'student'																								AS role
 	, CAST(0 AS boolean)																					AS primary
-	, CONCAT('{ "sourcedId": "s' , CAST(STSA.studentusi AS VARCHAR)	 , '" }')								AS user
+	, CONCAT('{ "sourcedId": "s' , CAST(stu.StudentUniqueId AS VARCHAR)	 , '" }')								AS user
 	, CONCAT('{ "sourcedId": "',SEC.Id, '" }')																AS class
 	, CONCAT('{ "sourcedId": "',EO.id, '"}')																AS school
 	, SSA.BeginDate::timestamp with time zone																AS "beginDate"
 	, SSA.EndDate::timestamp with time zone	 																AS "endDate"	
-	, concat('s' , CAST(STSA.studentusi AS VARCHAR)	) as id
+	, concat('s' , CAST(stu.StudentUniqueId AS VARCHAR)	) as id
 	, SEC.Id classid
 
-FROM  edfi.StudentSectionAssociation AS STSA
- JOIN edfi.StaffSectionAssociation SSA  	 
+FROM  
+edfi.student stu 
+JOIN edfi.StudentSectionAssociation AS STSA on stu.studentusi = STSA.studentusi
+JOIN edfi.StaffSectionAssociation SSA  	 
 	ON STSA.SectionIdentifier = SSA.SectionIdentifier 
 	and STSA.LocalCourseCode = SSA.LocalCourseCode
 	AND STSA.SchoolId = SSA.SchoolId
