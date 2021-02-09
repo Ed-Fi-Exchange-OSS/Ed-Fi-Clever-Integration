@@ -81,6 +81,10 @@ and SSAT.exitwithdrawdate is null
 order by SSAT.createdate desc  limit 1
 )
 and UPPER(CPD.CodeValue) = UPPER('Teacher Of Record') 
+
+
+
+
 GROUP BY	EDO.educationorganizationid ,SEC.Id, SEC.LastModifiedDate, SEC.LocalCourseCode, SEC.SequenceOfCourse, SEC.LocationClassroomIdentificationCode, 
 			SEC.SchoolId, SEC.SchoolYear, SEC.SectionIdentifier, SEC.SessionName,
 			COU.Id, COU.CourseTitle, COU.CourseCode, COU.EducationOrganizationId, 

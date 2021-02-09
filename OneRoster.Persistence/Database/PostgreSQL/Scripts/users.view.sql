@@ -16,7 +16,7 @@ AS
 		, concat('t',sta.StaffUniqueId) 							as "sourcedId"		
 		, 'active' 											as "status" 
 		, sta.LastModifiedDate::timestamp with time zone  	as "dateLastModified"
-		, case when sta.LoginId is null then concat('t',CAST(STA.StaffUniqueId as VARCHAR)) else STA.LoginId end as "username"
+		, COALESCE ((select ElectronicMailAddress from edfi.StaffElectronicMail SEMT where SEMT.staffusi=STA.staffusi limit 1) ,'') as "username"
 		-- Assumption: If a teacher is teaching a course they are enabled.
 		, true 												as "enabledUser"
 		, sta.FirstName										as "givenName"
@@ -37,6 +37,8 @@ left join edfi.educationorganization  eo on seoaa.educationorganizationid = eo.e
 inner join edfi."descriptor" scd on seoaa.staffclassificationdescriptorid = scd.descriptorid
 where not exists(select ssa.staffusi from  edfi.staffsectionassociation ssa where sta.staffusi = ssa.staffusi)
 and seoaa.BeginDate<=CURRENT_DATE and (seoaa.EndDate is null OR seoaa.EndDate >= CURRENT_DATE)
+
+
 )
 
 UNION ALL
@@ -53,7 +55,7 @@ UNION ALL
 		-- Database does not have a begin and enddate for the section so we cant calcualte active.
 		, 'active' 											as "status" 
 		, sta.LastModifiedDate::timestamp with time zone  	as "dateLastModified"
-		, case when sta.LoginId is null then concat('t',CAST(STA.StaffUniqueId as VARCHAR)) else STA.LoginId end as "username"
+		, COALESCE ((select ElectronicMailAddress from edfi.StaffElectronicMail SEMT where SEMT.staffusi=STA.staffusi limit 1) ,'') as "username"
 		-- Assumption: If a teacher is teaching a course they are enabled.
 		, true 												as "enabledUser"
 		, sta.FirstName										as "givenName"
@@ -73,6 +75,8 @@ inner join edfi."descriptor" cpd on ssa.classroompositiondescriptorid = cpd.desc
 inner join edfi.schoolyeartype syt on ssa.schoolyear = syt.schoolyear and syt.currentschoolyear 
 join edfi.staffeducationorganizationassignmentassociation seoaa on sta.staffusi = seoaa.staffusi
 where seoaa.BeginDate<=CURRENT_DATE and (seoaa.EndDate is null OR seoaa.EndDate >= CURRENT_DATE)
+--ignore
+and sta.staffuniqueid ~ '^[0-9\.]+$' = true
 --where ssa.schoolid = 84202
 group by ssa.schoolid, eo.id, eo.educationorganizationid, eo.nameofinstitution, ssa.schoolyear, sta.staffusi, sta.firstname, sta.lastsurname, cpd.codevalue, "sourcedId", "status"
 --ssa.localcoursecode, ssa.begindate, ssa.enddate
@@ -91,7 +95,7 @@ select
 		-- Database does not have a begin and enddate for the section so we cant calcualte active.
 		, 'active' 											as "status" 
 		, stu.LastModifiedDate::timestamp with time zone  	as "dateLastModified"
-		, case when SEOA.LoginId is null then concat('s',CAST(stu.StudentUniqueId as VARCHAR)) else SEOA.LoginId end as "username"
+		,	COALESCE (( 	SELECT  ElectronicMailAddress FROM edfi.studenteducationorganizationassociationelectronicmail STUEM where STUEM.StudentUSI=STU.StudentUSI limit 1) ,'')	as "username"
 		-- Assumption: If a teacher is teaching a course they are enabled.
 		, true 												as "enabledUser"
 		, STU.FirstName										as "givenName"
