@@ -4,6 +4,7 @@ namespace EdFi.OneRoster.WebApi.Services.Models
 {
     public class ApplicationSettings
     {
+        public string DbMode { get; set; }
         public Dictionary<string,string> Clients { get; set; }
 
         /// <summary>

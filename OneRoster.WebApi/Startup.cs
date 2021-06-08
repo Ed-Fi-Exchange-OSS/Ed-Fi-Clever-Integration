@@ -47,7 +47,15 @@ namespace EdFi.OneRoster.WebApi
 
             services.AddScoped<IIdentityService, IdentityService>();
 
-            services.AddDbContext<EdfiContext>(options =>options.UseNpgsql(Configuration.GetConnectionString("PostgreSQLConnection")));
+            var dbMode = Configuration.GetValue<string>("ApplicationSettings:DbMode");
+            if (dbMode == "MsSQL")
+            {
+                services.AddDbContext<EdfiContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgreSQLConnection")));
+            }
+            else
+            {
+                services.AddDbContext<EdfiContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgreSQLConnection")));
+            }
 
             services.AddControllers().AddJsonOptions(options =>
             {
