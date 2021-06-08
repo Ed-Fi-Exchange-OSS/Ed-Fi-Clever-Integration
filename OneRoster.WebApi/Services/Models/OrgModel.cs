@@ -19,8 +19,7 @@ namespace EdFi.OneRoster.WebApi.Services.Models
             type = orgs.type;
             identifier = orgs.identifier;
             if(orgs.parentId!=null)
-            parent = new ParentModel() { sourcedId = orgs.parentId.ToString() };
-
+                parent = new ParentModel() { sourcedId = orgs.parentId.ToString() };
         }
     }
 }

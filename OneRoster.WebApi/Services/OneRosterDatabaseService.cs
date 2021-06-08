@@ -10,11 +10,11 @@ namespace EdFi.OneRoster.WebApi.Services
 {
     public class OneRosterDatabaseService : IOneRosterService
     {
-        EdfiContext _db { get; set; }
+        EdFiContext _db { get; set; }
         private readonly int? _localEducationAgencyId;
         private readonly int? _schoolId;
 
-        public OneRosterDatabaseService(EdfiContext db, IOptions<ApplicationSettings> appSettings)
+        public OneRosterDatabaseService(EdFiContext db, IOptions<ApplicationSettings> appSettings)
         {
             _db = db;
 

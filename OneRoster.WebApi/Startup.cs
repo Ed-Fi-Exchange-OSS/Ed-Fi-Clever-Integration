@@ -50,11 +50,11 @@ namespace EdFi.OneRoster.WebApi
             var dbMode = Configuration.GetValue<string>("ApplicationSettings:DbMode");
             if (dbMode == "MsSQL")
             {
-                services.AddDbContext<EdfiContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgreSQLConnection")));
+                services.AddDbContext<EdFiContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MsSQLConnection")));
             }
             else
             {
-                services.AddDbContext<EdfiContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgreSQLConnection")));
+                services.AddDbContext<EdFiContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgreSQLConnection")));
             }
 
             services.AddControllers().AddJsonOptions(options =>

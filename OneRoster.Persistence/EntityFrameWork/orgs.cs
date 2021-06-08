@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace EdFi.OneRoster.Persistence.EntityFrameWork
 {
-    public partial class orgs : ISchool
+    public class orgs : ISchool
     {
         [JsonIgnore]
         public int SchoolId { get; set; }
