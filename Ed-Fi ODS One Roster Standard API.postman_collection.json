@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "227fafc3-6146-4c6b-82c2-c5e7f2703667",
+		"_postman_id": "abe8e3f3-d109-4b8e-9e66-ee0895f805dd",
 		"name": "One Roster Standard API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -12,52 +12,42 @@
 			},
 			"request": {
 				"auth": {
-					"type": "oauth2",
-					"oauth2": [
+					"type": "oauth1",
+					"oauth1": [
 						{
-							"key": "tokenName",
-							"value": "BaseToken",
+							"key": "disableHeaderEncoding",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
 							"type": "string"
 						},
 						{
-							"key": "accessTokenUrl",
-							"value": "{{apiRoot}}/OAuth/token",
+							"key": "consumerSecret",
+							"value": "{{Secret}}",
 							"type": "string"
 						},
 						{
-							"key": "clientSecret",
-							"value": "96504f1498b8e28783cb6a07",
+							"key": "consumerKey",
+							"value": "{{Key}}",
 							"type": "string"
 						},
 						{
-							"key": "clientId",
-							"value": "96504f1498b8e28783cb6a07",
+							"key": "version",
+							"value": "1.0",
 							"type": "string"
 						},
 						{
-							"key": "scope",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "client_authentication",
-							"value": "body",
-							"type": "string"
-						},
-						{
-							"key": "grant_type",
-							"value": "client_credentials",
-							"type": "string"
-						},
-						{
-							"key": "authUrl",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
-							"type": "string"
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
 						}
 					]
 				},
@@ -115,57 +105,59 @@
 			},
 			"request": {
 				"auth": {
-					"type": "oauth2",
-					"oauth2": [
+					"type": "oauth1",
+					"oauth1": [
 						{
-							"key": "tokenName",
-							"value": "BaseToken",
+							"key": "disableHeaderEncoding",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
 							"type": "string"
 						},
 						{
-							"key": "accessTokenUrl",
-							"value": "{{apiRoot}}/OAuth/token",
+							"key": "consumerSecret",
+							"value": "{{Secret}}",
 							"type": "string"
 						},
 						{
-							"key": "clientSecret",
-							"value": "96504f1498b8e28783cb6a07",
+							"key": "consumerKey",
+							"value": "{{Key}}",
 							"type": "string"
 						},
 						{
-							"key": "clientId",
-							"value": "96504f1498b8e28783cb6a07",
+							"key": "version",
+							"value": "1.0",
 							"type": "string"
 						},
 						{
-							"key": "scope",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "client_authentication",
-							"value": "body",
-							"type": "string"
-						},
-						{
-							"key": "grant_type",
-							"value": "client_credentials",
-							"type": "string"
-						},
-						{
-							"key": "authUrl",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
-							"type": "string"
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
 						}
 					]
 				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{Token}}",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "OAuth oauth_consumer_key=\\\"n3Gg5wduuoae\\\", oauth_nonce=\\\"fc4bf046ec10452e\\\", oauth_signature=\\\"EUD5s%2BF4nwLgd%2B%2BjXE4XeBl0AwE19LZidRPAt5XWdaA%3D\\\", oauth_signature_method=\\\"HMAC-SHA256\\\", oauth_timestamp=\\\"1597848749\\\", oauth_version=\\\"1.0\\\""
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": ""
@@ -209,52 +201,42 @@
 			},
 			"request": {
 				"auth": {
-					"type": "oauth2",
-					"oauth2": [
+					"type": "oauth1",
+					"oauth1": [
 						{
-							"key": "tokenName",
-							"value": "BaseToken",
+							"key": "disableHeaderEncoding",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
 							"type": "string"
 						},
 						{
-							"key": "accessTokenUrl",
-							"value": "{{apiRoot}}/OAuth/token",
+							"key": "consumerSecret",
+							"value": "{{Secret}}",
 							"type": "string"
 						},
 						{
-							"key": "clientSecret",
-							"value": "96504f1498b8e28783cb6a07",
+							"key": "consumerKey",
+							"value": "{{Key}}",
 							"type": "string"
 						},
 						{
-							"key": "clientId",
-							"value": "96504f1498b8e28783cb6a07",
+							"key": "version",
+							"value": "1.0",
 							"type": "string"
 						},
 						{
-							"key": "scope",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "client_authentication",
-							"value": "body",
-							"type": "string"
-						},
-						{
-							"key": "grant_type",
-							"value": "client_credentials",
-							"type": "string"
-						},
-						{
-							"key": "authUrl",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
-							"type": "string"
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
 						}
 					]
 				},
@@ -309,52 +291,42 @@
 			},
 			"request": {
 				"auth": {
-					"type": "oauth2",
-					"oauth2": [
+					"type": "oauth1",
+					"oauth1": [
 						{
-							"key": "tokenName",
-							"value": "BaseToken",
+							"key": "disableHeaderEncoding",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
 							"type": "string"
 						},
 						{
-							"key": "accessTokenUrl",
-							"value": "{{apiRoot}}/OAuth/token",
+							"key": "consumerSecret",
+							"value": "{{Secret}}",
 							"type": "string"
 						},
 						{
-							"key": "clientSecret",
-							"value": "96504f1498b8e28783cb6a07",
+							"key": "consumerKey",
+							"value": "{{Key}}",
 							"type": "string"
 						},
 						{
-							"key": "clientId",
-							"value": "96504f1498b8e28783cb6a07",
+							"key": "version",
+							"value": "1.0",
 							"type": "string"
 						},
 						{
-							"key": "scope",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "client_authentication",
-							"value": "body",
-							"type": "string"
-						},
-						{
-							"key": "grant_type",
-							"value": "client_credentials",
-							"type": "string"
-						},
-						{
-							"key": "authUrl",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
-							"type": "string"
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
 						}
 					]
 				},
@@ -411,52 +383,42 @@
 			},
 			"request": {
 				"auth": {
-					"type": "oauth2",
-					"oauth2": [
+					"type": "oauth1",
+					"oauth1": [
 						{
-							"key": "tokenName",
-							"value": "BaseToken",
+							"key": "disableHeaderEncoding",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
 							"type": "string"
 						},
 						{
-							"key": "accessTokenUrl",
-							"value": "{{apiRoot}}/OAuth/token",
+							"key": "consumerSecret",
+							"value": "{{Secret}}",
 							"type": "string"
 						},
 						{
-							"key": "clientSecret",
-							"value": "96504f1498b8e28783cb6a07",
+							"key": "consumerKey",
+							"value": "{{Key}}",
 							"type": "string"
 						},
 						{
-							"key": "clientId",
-							"value": "96504f1498b8e28783cb6a07",
+							"key": "version",
+							"value": "1.0",
 							"type": "string"
 						},
 						{
-							"key": "scope",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "client_authentication",
-							"value": "body",
-							"type": "string"
-						},
-						{
-							"key": "grant_type",
-							"value": "client_credentials",
-							"type": "string"
-						},
-						{
-							"key": "authUrl",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
-							"type": "string"
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
 						}
 					]
 				},
@@ -512,56 +474,6 @@
 				"disableBodyPruning": true
 			},
 			"request": {
-				"auth": {
-					"type": "oauth2",
-					"oauth2": [
-						{
-							"key": "tokenName",
-							"value": "BaseToken",
-							"type": "string"
-						},
-						{
-							"key": "accessTokenUrl",
-							"value": "{{apiRoot}}/OAuth/token",
-							"type": "string"
-						},
-						{
-							"key": "clientSecret",
-							"value": "96504f1498b8e28783cb6a07",
-							"type": "string"
-						},
-						{
-							"key": "clientId",
-							"value": "96504f1498b8e28783cb6a07",
-							"type": "string"
-						},
-						{
-							"key": "scope",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "client_authentication",
-							"value": "body",
-							"type": "string"
-						},
-						{
-							"key": "grant_type",
-							"value": "client_credentials",
-							"type": "string"
-						},
-						{
-							"key": "authUrl",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
-							"type": "string"
-						}
-					]
-				},
 				"method": "GET",
 				"header": [
 					{
