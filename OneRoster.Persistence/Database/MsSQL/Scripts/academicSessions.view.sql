@@ -1,5 +1,4 @@
-drop view if exists onerosterv11.academicSessions;
-CREATE VIEW onerosterv11.academicSessions
+CREATE OR ALTER VIEW onerosterv11.academicSessions
 AS
 -- SchoolYears
 SELECT       

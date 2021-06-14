@@ -1,7 +1,5 @@
 
-drop view if exists onerosterv11.enrollments;
-
-CREATE VIEW onerosterv11.enrollments
+CREATE OR ALTER VIEW onerosterv11.enrollments
 AS
 
 
@@ -11,14 +9,14 @@ SELECT DISTINCT
 	,eo.nameofinstitution																				AS "NameOfInstitution"
 	,SSA.Id																								AS "sourcedId"
 	, 'active'																							AS status
-	,SEC.LastModifiedDate::timestamp with time zone														AS "dateLastModified"
+	, SEC.LastModifiedDate 														AS "dateLastModified"
 	, 'teacher'																							as role
-	, CAST(CASE WHEN UPPER(CD.CodeValue) = UPPER('Teacher Of Record') THEN true ELSE false END AS boolean)    		AS primary
-	, CONCAT('{ "sourcedId": "',(CASE WHEN SSA.ClassroomPositionDescriptorId IS NULL THEN 'a' ELSE 't' END),CAST(ssa.staffusi AS VARCHAR) , '"}')									as user
+	, CAST(CASE WHEN UPPER(CD.CodeValue) = UPPER('Teacher Of Record') THEN 1 ELSE 0 END AS  bit)    		AS 'primary'
+	, CONCAT('{ "sourcedId": "',(CASE WHEN SSA.ClassroomPositionDescriptorId IS NULL THEN 'a' ELSE 't' END),CAST(ssa.staffusi AS VARCHAR) , '"}') as 'user'
 	, CONCAT('{ "sourcedId":"', SEC.Id, '" }')															AS class
 	, CONCAT('{ "sourcedId":"', EO.id, '"  }')															AS school
-	, SSA.BeginDate::timestamp with time zone																AS "beginDate"
-	, SSA.EndDate::timestamp with time zone	 																AS "endDate"	
+	,  SSA.BeginDate  															AS "beginDate"
+	,  SSA.EndDate																AS "endDate"	
 	, CONCAT((CASE WHEN SSA.ClassroomPositionDescriptorId IS NULL THEN 'a' ELSE 't' END),CAST(ssa.staffusi AS VARCHAR) ) as id
 		, SEC.Id classid
 FROM edfi.StaffSectionAssociation SSA 	
@@ -40,10 +38,10 @@ LEFT JOIN edfi.Descriptor CD  	ON SSA.ClassroomPositionDescriptorId = CD.Descrip
 	
 	
 where
-exists(select 1 from  
+exists(select TOP(1)1 from  
 edfi.StudentSchoolAssociation SSAT where  SSAT.studentusi = STSA.studentusi 
 and SSAT.exitwithdrawdate is null 
-order by SSAT.createdate desc  limit 1
+order by SSAT.createdate desc 
 )
 
 )  
@@ -54,14 +52,14 @@ SELECT DISTINCT
 	,eo.nameofinstitution																					AS nameofinstitution
 	,STSA.Id																								AS "sourcedId"
 	, 'active'	AS status
-	, SEC.LastModifiedDate::timestamp with time zone														AS "dateLastModified"
+	,  SEC.LastModifiedDate													AS "dateLastModified"
 	, 'student'																								AS role
-	, CAST(0 AS boolean)																					AS primary
-	, CONCAT('{ "sourcedId": "s' , CAST(STSA.studentusi AS VARCHAR)	 , '" }')								AS user
+	, CAST(0 AS bit)																					AS 'primary'
+	, CONCAT('{ "sourcedId": "s' , CAST(STSA.studentusi AS VARCHAR)	 , '" }')								AS 'user'
 	, CONCAT('{ "sourcedId": "',SEC.Id, '" }')																AS class
 	, CONCAT('{ "sourcedId": "',EO.id, '"}')																AS school
-	, SSA.BeginDate::timestamp with time zone																AS "beginDate"
-	, SSA.EndDate::timestamp with time zone	 																AS "endDate"	
+	, CONVERT(VARCHAR(10),SSA.BeginDate, 107) 															AS "beginDate"
+	, CONVERT(VARCHAR(10),SSA.EndDate, 107)																AS "endDate"	
 	, concat('s' , CAST(STSA.studentusi AS VARCHAR)	) as id
 	, SEC.Id classid
 
@@ -82,6 +80,6 @@ FROM  edfi.StudentSectionAssociation AS STSA
 LEFT JOIN edfi.EducationOrganization EO ON SEC.SchoolId = EO.educationOrganizationId
 join edfi.StudentSchoolAssociation SSAT on SSAT.StudentUSI = STSA.StudentUSI
 where SSAT.exitwithdrawdate is null
-AND stsa.begindate <= current_date
-AND (current_date <= stsa.enddate OR stsa.enddate IS NULL)
+AND stsa.begindate <= GETDATE()
+AND ( GETDATE() <= stsa.enddate OR stsa.enddate IS NULL)
 )
