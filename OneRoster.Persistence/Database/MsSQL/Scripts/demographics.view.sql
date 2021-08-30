@@ -1,43 +1,42 @@
-/****** Object:  View [onerosterv11].[demographics]    Script Date: 6/9/2021 9:46:21 AM ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
---drop view if exists onerosterv11.demographics;
-
-CREATE OR ALTER VIEW [onerosterv11].[demographics]
-AS
+--CREATE OR ALTER VIEW [onerosterv11].[demographics] AS
 
 -- TEACHERS // STAFF
 SELECT  DISTINCT 
 	-- a = staff, t = teacher
-	CONCAT((CASE WHEN SSA.ClassroomPositionDescriptorId IS NULL THEN 't' ELSE 't' END), 
-	CAST(sta.StaffUSI AS VARCHAR)  
-	) 				AS "sourcedId"
-	, 
-	CASE WHEN (SELECT TOP 2 COUNT(SEOAAT.StaffUSI) FROM edfi.StaffEducationOrganizationAssignmentAssociation SEOAAT 
-	WHERE SEOAAT.StaffUSI = SEOAA.StaffUSI GROUP BY SEOAAT.StaffUSI /*LIMIT 2*/) = 1 AND SEOAA.EndDate IS NULL 
-	THEN 'active' ELSE 'active' END 																							AS status
+	CONCAT('t',CAST(sta.StaffUSI AS VARCHAR)) 																					AS "sourcedId"
+	, CASE WHEN (SELECT TOP 2 COUNT(SEOAAT.StaffUSI) FROM edfi.StaffEducationOrganizationAssignmentAssociation SEOAAT 
+		WHERE SEOAAT.StaffUSI = SEOAA.StaffUSI GROUP BY SEOAAT.StaffUSI /*LIMIT 2*/) = 1 AND SEOAA.EndDate IS NULL 
+	  THEN 'active' ELSE 'tobedeleted' END 																						AS "status"
     , STA.LastModifiedDate						                                                        						AS "dateLastModified"
-	, '10-10-1987'/*::date*/																											as "birthDate"
-	, CASE WHEN SED.CodeValue = 'Female' THEN 'female' ELSE 'male' END																AS sex
-	, CAST(CASE WHEN RAD.CodeValue = 'American Indian - Alaska Native' THEN 'true' ELSE 'false' END AS VARCHAR)						AS "americanIndianOrAlaskaNative"
-	, CAST(CASE WHEN RAD.CodeValue = 'Asian' THEN 'true' ELSE 'false' END AS VARCHAR)												AS asian
-    , CAST(CASE WHEN RAD.CodeValue = 'Black - African American' THEN 'true' ELSE 'false' END AS VARCHAR)							AS "blackOrAfricanAmerican"
-    , CAST(CASE WHEN RAD.CodeValue = 'Native Hawaiian - Pacific Islander' THEN 'true' ELSE 'false' END AS VARCHAR)					AS "nativeHawaiianOrOtherPacificIslander"
-	, CAST(CASE WHEN RAD.CodeValue = 'White' THEN 'true' ELSE 'false' END AS VARCHAR)												AS white
-    , CAST(CASE WHEN RAD.CodeValue = 'Other'  or RAD.CodeValue = 'Two or More Races' THEN 'true' ELSE 'false' END AS VARCHAR)						AS "demographicRaceTwoOrMoreRaces"
-	,  CAST(CASE WHEN STA.HispanicLatinoEthnicity = 1 THEN 'true' ELSE 'false' END AS VARCHAR)  AS "hispanicOrLatinoEthnicity"
-	
-    
+	, STA.BirthDate																												AS "birthDate"
+	, CASE WHEN SED.CodeValue = 'Female' THEN 'female' ELSE 'male' END															AS "sex"
+	, CAST(CASE WHEN srdIndian.CodeValue IS NOT NULL THEN 'true' ELSE 'false' END AS VARCHAR)					AS "americanIndianOrAlaskaNative"
+	, CAST(CASE WHEN RAD.CodeValue = 'Asian' THEN 'true' ELSE 'false' END AS VARCHAR)											AS "asian"
+    , CAST(CASE WHEN RAD.CodeValue = 'Black - African American' THEN 'true' ELSE 'false' END AS VARCHAR)						AS "blackOrAfricanAmerican"
+    , CAST(CASE WHEN RAD.CodeValue = 'Native Hawaiian - Pacific Islander' THEN 'true' ELSE 'false' END AS VARCHAR)				AS "nativeHawaiianOrOtherPacificIslander"
+	, CAST(CASE WHEN RAD.CodeValue = 'White' THEN 'true' ELSE 'false' END AS VARCHAR)											AS "white"
+    , CAST(CASE WHEN RAD.CodeValue = 'Other'  or RAD.CodeValue = 'Two or More Races' THEN 'true' ELSE 'false' END AS VARCHAR)	AS "demographicRaceTwoOrMoreRaces"
+	, CAST(CASE WHEN STA.HispanicLatinoEthnicity = 1 THEN 'true' ELSE 'false' END AS VARCHAR)									AS "hispanicOrLatinoEthnicity"
 FROM edfi.Staff STA 
 LEFT JOIN edfi.StaffSectionAssociation SSA	ON STA.StaffUSI = SSA.StaffUSI
 LEFT JOIN edfi.StaffEducationOrganizationAssignmentAssociation SEOAA	ON STA.StaffUSI = SEOAA.StaffUSI
-LEFT JOIN edfi.Descriptor SED 	ON STA.SexDescriptorId = SED.DescriptorId
-LEFT  JOIN  ( select SRASingle.StaffUSI,SRASingle.RaceDescriptorId  from  edfi.StaffRace SRASingle  ) SRA ON STA.StaffUSI = SRA.StaffUSI
-LEFT JOIN edfi.Descriptor RAD 	ON SRA.RaceDescriptorId = RAD.DescriptorId
+LEFT JOIN edfi.Descriptor SED ON STA.SexDescriptorId = SED.DescriptorId
+LEFT JOIN (select SRASingle.StaffUSI, SRASingle.RaceDescriptorId  from edfi.StaffRace SRASingle) SRA ON STA.StaffUSI = SRA.StaffUSI
+LEFT JOIN edfi.Descriptor RAD ON SRA.RaceDescriptorId = RAD.DescriptorId
+/*Race Joins:*/
+-- 'American Indian - Alaska Native'
+LEFT JOIN edfi.StaffRace srIndian ON STA.StaffUSI = srIndian.StaffUSI
+LEFT JOIN edfi.Descriptor srdIndian ON srIndian.RaceDescriptorId = srdIndian.DescriptorId and srdIndian.CodeValue = 'American Indian - Alaska Native'
+-- 'Asian'
+LEFT JOIN edfi.StaffRace srAsian ON STA.StaffUSI = srAsian.StaffUSI
+LEFT JOIN edfi.Descriptor srdAsian ON srAsian.RaceDescriptorId = srdAsian.DescriptorId and srdAsian.CodeValue = 'Asian'
+-- 'Black - African American'
+LEFT JOIN edfi.StaffRace srBlack ON STA.StaffUSI = srBlack.StaffUSI
+LEFT JOIN edfi.Descriptor srdBlack ON srAsian.RaceDescriptorId = srdBlack.DescriptorId and srdBlack.CodeValue = 'Black - African American'
+-- TODO: Add more races.
+
+
+--SELECT staffusi, Count(*) FROM edfi.StaffRace group by StaffUsi
 
 UNION ALL
 -- STUDENTS

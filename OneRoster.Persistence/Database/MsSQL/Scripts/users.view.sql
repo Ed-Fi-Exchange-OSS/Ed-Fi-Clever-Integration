@@ -6,15 +6,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
-
-
-
-
-
---drop view if exists onerosterv11.users;
-
-
 -- STUDENTS AND TEACHERS
 CREATE OR ALTER  VIEW [onerosterv11].[users]
 AS

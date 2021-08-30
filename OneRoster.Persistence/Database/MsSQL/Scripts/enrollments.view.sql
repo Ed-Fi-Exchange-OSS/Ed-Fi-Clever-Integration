@@ -34,9 +34,6 @@ LEFT JOIN edfi.Descriptor CD  	ON SSA.ClassroomPositionDescriptorId = CD.Descrip
 	AND STSA.SchoolId = SSA.SchoolId
 	AND STSA.SchoolYear = SSA.SchoolYear
 	AND STSA.SessionName = SSA.SessionName
-	
-	
-	
 where
 exists(select TOP(1)1 from  
 edfi.StudentSchoolAssociation SSAT where  SSAT.studentusi = STSA.studentusi 
@@ -58,8 +55,8 @@ SELECT DISTINCT
 	, CONCAT('{ "sourcedId": "s' , CAST(STSA.studentusi AS VARCHAR)	 , '" }')								AS 'user'
 	, CONCAT('{ "sourcedId": "',SEC.Id, '" }')																AS class
 	, CONCAT('{ "sourcedId": "',EO.id, '"}')																AS school
-	, CONVERT(VARCHAR(10),SSA.BeginDate, 107) 															AS "beginDate"
-	, CONVERT(VARCHAR(10),SSA.EndDate, 107)																AS "endDate"	
+	, SSA.BeginDate														AS "beginDate"
+	, SSA.EndDate															AS "endDate"	
 	, concat('s' , CAST(STSA.studentusi AS VARCHAR)	) as id
 	, SEC.Id classid
 

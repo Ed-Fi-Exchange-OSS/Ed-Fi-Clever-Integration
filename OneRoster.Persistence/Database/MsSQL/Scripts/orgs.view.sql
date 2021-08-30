@@ -8,7 +8,7 @@ SELECT
 	, CASE WHEN SD.CodeValue = 'Active' THEN 'active'
 		   WHEN SD.CodeValue IS NULL THEN 'active' --Usually LEAs are null which means active.
 	  ELSE 'tobedeleted' END											AS status
-	,  CONVERT(VARCHAR(10),  EO.LastModifiedDate, 107) 					AS "dateLastModified"
+	, EO.LastModifiedDate					AS "dateLastModified"
 	, EO.NameOfInstitution												AS name
 	, CASE WHEN SEA.StateEducationAgencyId IS NOT NULL THEN 'state'
 		   WHEN LEA.LocalEducationAgencyId IS NOT NULL THEN 'district' 
